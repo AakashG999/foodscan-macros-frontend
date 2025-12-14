@@ -29,3 +29,14 @@
     50% { opacity: 1; }
     100% { opacity: 0.4; }
 }
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;   /* ⛔ prevents page scrolling completely */
+    touch-action: none; /* prevents iOS rubber-band scroll */
+    background-color: #0f172a; /* dark mode */
+}
+#chat-input-bar {
+    padding-bottom: max(env(safe-area-inset-bottom), 12px);
+}

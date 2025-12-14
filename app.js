@@ -52,6 +52,9 @@ cameraInput.onchange = async (e) => {
 
     const previewURL = URL.createObjectURL(file);
 
+    // ✅ Hide the camera screen immediately
+    cameraScreen.classList.add("hidden");
+
     // Show processing screen
     processingScreen.classList.remove("hidden");
     document.getElementById("processingImage").src = previewURL;
@@ -81,10 +84,10 @@ cameraInput.onchange = async (e) => {
     const data = await response.json();
     clearInterval(stepInterval);
 
+    // Switch to results UI
     processingScreen.classList.add("hidden");
     resultsScreen.classList.remove("hidden");
 
-    // NO FOOD DETECTED
     if (data.no_food) {
         showNoFoodDetected(previewURL, data);
         return;
@@ -92,6 +95,7 @@ cameraInput.onchange = async (e) => {
 
     populateResultsUI(data, previewURL);
 };
+
 
 /* ================================================
    NO FOOD DETECTED HANDLER
@@ -155,8 +159,16 @@ document.getElementById("retakeBtn").onclick = () => {
    RETURN TO CHAT SCREEN
 =================================================== */
 function returnToChat() {
+    // Hide camera + processing + results screens
+    cameraScreen.classList.add("hidden");
+    processingScreen.classList.add("hidden");
     resultsScreen.classList.add("hidden");
+
+    // Show chat screen only
     chatScreen.classList.remove("hidden");
+
+    // STOP any active camera stream (very important)
+    stopCameraStream();
 }
 
 /* ================================================
@@ -235,6 +247,29 @@ async function sendMessage() {
     removeThinkingIndicator();
     appendBotMessage(data.reply || "I didn't understand that.");
 }
+
+
+async function handleSuggestedMessage(text) {
+    // show as USER message (right bubble)
+    appendUserMessage(text);
+
+    // show thinking indicator
+    showThinkingIndicator();
+
+    // send to backend
+    const response = await fetch(API_CHAT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: text })
+    });
+
+    const data = await response.json();
+
+    // remove indicator + show bot reply
+    removeThinkingIndicator();
+    appendBotMessage(data.reply || "I'm here to help!");
+}
+
 
 /* ================================================
    CHAT BUBBLE HELPERS
@@ -331,5 +366,55 @@ function updateResultsUI(data, imgURL) {
         data.ingredients
             ?.map(i => `<li>${i.item} — ${i.quantity} (${Math.round(i.confidence * 100)}%)</li>`)
             .join("");
+}
+function loadWelcomeMessages() {
+    const container = chatContainer;
+
+    // 1) Welcome message
+    appendBotMessage("Hi Dear! 👋");
+
+    // 2) Simple text bubble
+    appendBotMessage("What are you curious about today?");
+
+    // 3) CLICKABLE: Open camera
+    const scanBubble = document.createElement("div");
+    scanBubble.className =
+        "self-start bg-white text-black dark:bg-gray-200 dark:text-black p-3 rounded-xl max-w-[75%] cursor-pointer shadow";
+    scanBubble.innerText = "Not sure what’s in your plate? I’ll scan it for you";
+
+    scanBubble.onclick = () => {
+        // open camera
+        chatScreen.classList.add("hidden");
+        cameraScreen.classList.remove("hidden");
+    };
+
+    container.appendChild(scanBubble);
+
+    // 4) CLICKABLE: Send message to chatbot
+    const lowCalBubble = document.createElement("div");
+    lowCalBubble.className =
+        "self-start bg-white text-black dark:bg-gray-200 dark:text-black p-3 rounded-xl max-w-[75%] cursor-pointer shadow";
+    lowCalBubble.innerText = "Want low-calorie healthy food suggestions?";
+
+    lowCalBubble.onclick = () => {
+        handleSuggestedMessage("Want low-calorie healthy food suggestions?");
+    };
+
+    container.appendChild(lowCalBubble);
+
+    container.scrollTop = container.scrollHeight;
+}
+
+window.onload = () => {
+    loadWelcomeMessages();
+};
+
+function stopCameraStream() {
+    const video = document.getElementById("cameraView");
+    if (video && video.srcObject) {
+        const tracks = video.srcObject.getTracks();
+        tracks.forEach((t) => t.stop());
+        video.srcObject = null;
+    }
 }
 

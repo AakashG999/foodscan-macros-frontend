@@ -18,26 +18,55 @@
 <h1 class="text-2xl font-bold p-4">FoodScan AI</h1>
 
 <!-- CHAT SCREEN -->
-<div id="screen-chat" class="flex flex-col flex-1 p-4 gap-3">
+<div id="screen-chat"
+     class="flex flex-col w-full"
+     style="height: 100vh; max-height: 100vh; overflow: hidden;">
 
     <!-- CHAT MESSAGES -->
     <div id="chat-container"
-         class="flex-1 overflow-y-auto flex flex-col gap-3 p-2 bg-gray-800 rounded-lg"></div>
+     style="
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        -webkit-overflow-scrolling: touch; /* smooth mobile scroll */
+     ">
+</div>
+
 
     <!-- INPUT AREA -->
-    <div class="flex items-center gap-3 mt-2">
+    <div id="chat-input-bar"
+     style="
+        display: flex;
+        gap: 12px;
+        padding: 12px;
+        align-items: center;
+        background: #0f172a;
+        border-top: 1px solid #1e293b;
+        position: sticky;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+     ">
+    
+    <button id="openCameraBtn"
+            class="p-3 bg-gray-700 rounded-full">
+        📷
+    </button>
 
-        <!-- CAMERA BUTTON -->
-        <button id="openCameraBtn" class="p-3 bg-gray-700 rounded-full">📷</button>
+    <input id="chatInput"
+           class="flex-1 p-3 rounded-xl bg-gray-800 text-white"
+           placeholder="Type your message..." />
 
-        <!-- TEXT INPUT -->
-        <input id="chatInput"
-               class="flex-1 p-3 bg-gray-700 rounded-xl"
-               placeholder="Type your message..." />
+    <button id="sendBtn"
+            class="p-3 bg-blue-500 text-white rounded-full">
+        ➤
+    </button>
+</div>
 
-        <!-- SEND BUTTON -->
-        <button id="sendBtn" class="p-3 bg-blue-600 rounded-full">➤</button>
-    </div>
 </div>
 
 <!-- CAMERA SCREEN -->
