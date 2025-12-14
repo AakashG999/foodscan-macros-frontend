@@ -214,7 +214,8 @@ function appendFoodCardToChat(data, imgURL, qty = 1) {
     `;
 
     chatContainer.appendChild(card);
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+    scrollToBottom();
+    //chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
 
@@ -280,7 +281,8 @@ function appendUserMessage(msg) {
     bubble.innerText = msg;
 
     chatContainer.appendChild(bubble);
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+    scrollToBottom();
+    //chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
 function appendBotMessage(msg) {
@@ -289,7 +291,8 @@ function appendBotMessage(msg) {
     bubble.innerText = msg;
 
     chatContainer.appendChild(bubble);
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+    scrollToBottom();
+    //chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
 /* ================================================
@@ -301,7 +304,8 @@ function showThinkingIndicator() {
     div.className = "self-start bg-gray-700 p-3 rounded-xl max-w-[70%] text-gray-300 italic";
     div.innerText = "Thinking…";
     chatContainer.appendChild(div);
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+    scrollToBottom();
+    //chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
 function removeThinkingIndicator() {
@@ -319,7 +323,8 @@ function addImageBubble(imgURL) {
         <img src="${imgURL}" class="w-20 h-20 object-cover rounded-xl border border-gray-700" />
     `;
     chatContainer.appendChild(div);
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+    scrollToBottom();
+    //chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
 /* ================================================
@@ -333,7 +338,8 @@ function addNotesMessage(notes) {
     div.innerText = notes;
 
     chatContainer.appendChild(div);
-    chatContainer.scrollTop = chatContainer.scrollHeight;
+    scrollToBottom();
+    //chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
 function updateResultsUI(data, imgURL) {
@@ -418,3 +424,8 @@ function stopCameraStream() {
     }
 }
 
+function scrollToBottom() {
+    requestAnimationFrame(() => {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    });
+}
