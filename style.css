@@ -1,0 +1,31 @@
+/* ============================================= */
+/* ANIMATED ANALYZING LOADER                     */
+/* ============================================= */
+
+.scan-circle {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    border: 4px solid rgba(255,255,255,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse 1.8s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(79, 141, 247, 0.7); }
+    70% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(79, 141, 247, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(79, 141, 247, 0); }
+}
+
+/* Fade text animation */
+.scan-text {
+    animation: fadeText 1.4s infinite;
+}
+
+@keyframes fadeText {
+    0% { opacity: 0.4; }
+    50% { opacity: 1; }
+    100% { opacity: 0.4; }
+}
